@@ -1,0 +1,29 @@
+{
+  "name": "qflag",
+  "version": "0.1.0",
+  "description": "A self-hosted feature flag control plane backed by a custom Raft consensus cluster.",
+  "license": "Apache-2.0",
+  "private": true,
+  "workspaces": [
+    "apps/dashboard",
+    "packages/sdk"
+  ],
+  "scripts": {
+    "build": "npm run build --workspace @qflag/sdk && npm run build --workspace @qflag/dashboard",
+    "build:backend": "node scripts/run-go.mjs build ./...",
+    "lint": "npm run lint --workspace @qflag/dashboard",
+    "test": "npm run test:sdk && npm run test:backend",
+    "test:sdk": "npm run test --workspace @qflag/sdk",
+    "test:backend": "node scripts/run-go.mjs test ./...",
+    "typecheck": "npm run build --workspace @qflag/sdk && tsc --noEmit -p apps/dashboard/tsconfig.json",
+    "check": "npm run lint && npm run test && npm run typecheck && npm run build && npm run build:backend",
+    "dev:dashboard": "npm run dev --workspace @qflag/dashboard",
+    "dev:backend": "cd services/qflag && go run ./cmd/qflag"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}
